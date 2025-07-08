@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/mountaineering-training-tracker.git"
+    "url": "git+https://github.com/jwolf842/mountaineering-training-tracker.git"
   },
   "keywords": [
     "mountaineering",
@@ -25,12 +25,12 @@
     "workout-tracker",
     "web-app"
   ],
-  "author": "Your Name",
+  "author": "John Wolf",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yourusername/mountaineering-training-tracker/issues"
+    "url": "https://github.com/jwolf842/mountaineering-training-tracker/issues"
   },
-  "homepage": "https://github.com/yourusername/mountaineering-training-tracker#readme",
+  "homepage": "https://github.com/jwolf842/mountaineering-training-tracker#readme",
   "devDependencies": {
     "@google/clasp": "^2.4.2",
     "@types/google-apps-script": "^1.0.56"
