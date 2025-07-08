@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mountaineering Training Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .session-info {
+            background: #f7fafc;
+            padding: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .session-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .week-info {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .warmup-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .warmup-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercise-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .expand-all-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .expand-all-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .exercise-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1rem;
+            flex: 1;
+        }
+
+        .collapse-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #667eea;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .collapse-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .exercise-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .exercise-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .exercise-content.expanded {
+            max-height: 1000px;
+            opacity: 1;
+            margin-top: 10px;
+        }
+
+        .exercise-item.collapsed {
+            margin-bottom: 10px;
+        }
+
+        .exercise-item.collapsed .exercise-header {
+            margin-bottom: 0;
+        }
+
+        .sets-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .set-row {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr 2fr;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+
+        .set-label {
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+            min-width: 50px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input.required {
+            border-left: 4px solid #dc3545;
+        }
+
+        .form-input.required:valid {
+            border-left: 4px solid #28a745;
+        }
+
+        .notes-input {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .session-notes {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .session-notes-title {
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+
+        .complete-section {
+            background: #f1f8e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #c3e6cb;
+        }
+
+        .duration-info {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 480px) {
+            .set-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            
+            .set-label {
+                min-width: auto;
+            }
+            
+            .form-input {
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            .section-controls {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .expand-all-btn {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+
+            .exercise-header {
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .exercise-name {
+                line-height: 1.3;
+            }
+        }
+
+        .cardio-exercise {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+        }
+
+        .strength-exercise {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mountaineering Training</h1>
+            <p>60-Session Program</p>
+        </div>
+
+        <div id="loadingSection" class="loading">
+            Loading your current session...
+        </div>
+
+        <div id="appContent" style="display: none;">
+            <div class="session-info">
+                <div class="session-number" id="sessionTitle">Session 1</div>
+                <div class="week-info" id="progressInfo">0% Complete</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 1.67%;"></div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div id="warmupSection" class="warmup-section">
+                    <div class="warmup-title">Warm-up</div>
+                    <div id="warmupContent">
+                        <!-- Warm-up exercises will be inserted here -->
+                    </div>
+                </div>
+
+                <div id="exerciseSection" class="exercise-section">
+                    <div class="exercise-title">Training Exercises</div>
+                    <div id="exerciseContent">
+                        <!-- Training exercises will be inserted here -->
+                    </div>
+                </div>
+
+                <div class="session-notes">
+                    <div class="session-notes-title">Session Notes (Optional)</div>
+                    <textarea 
+                        id="sessionNotes" 
+                        class="form-input notes-input" 
+                        placeholder="Add any notes about this session..."
+                    ></textarea>
+                </div>
+
+                <div class="complete-section">
+                    <button id="submitButton" class="submit-button">
+                        Complete Session
+                    </button>
+                </div>
+
+                <div id="messageArea"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSessionData = null;
+        let currentSessionNumber = 1;
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            showLoading(true);
+            
+            // Get current session from server
+            google.script.run
+                .withSuccessHandler(onCurrentSessionLoaded)
+                .withFailureHandler(onError)
+                .getCurrentSession();
+        }
+
+        function onCurrentSessionLoaded(sessionNumber) {
+            currentSessionNumber = sessionNumber;
+            
+            // Get session data
+            google.script.run
+                .withSuccessHandler(onSessionDataLoaded)
+                .withFailureHandler(onError)
+                .getSessionData(sessionNumber);
+        }
+
+        function onSessionDataLoaded(sessionData) {
+            if (!sessionData) {
+                showError('Session data not found. Please check your setup.');
+                return;
+            }
+            
+            currentSessionData = sessionData;
+            renderSession(sessionData);
+            showLoading(false);
+        }
+
+        function renderSession(sessionData) {
+            // Update session info
+            document.getElementById('sessionTitle').textContent = `Session ${sessionData.sessionNumber} of 60`;
+            
+            // Update progress bar and percentage
+            const progress = (sessionData.sessionNumber / 60) * 100;
+            const progressPercent = Math.round(progress);
+            document.getElementById('progressInfo').textContent = `${progressPercent}% Complete`;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+
+            // Render warm-up
+            renderWarmup(sessionData.warmup || []);
+            
+            // Render exercises
+            renderExercises(sessionData.exercises || []);
+            
+            // Set up form validation
+            setupFormValidation();
+        }
+
+        function renderWarmup(warmupExercises) {
+            const warmupContent = document.getElementById('warmupContent');
+            
+            if (warmupExercises.length === 0) {
+                warmupContent.innerHTML = '<p style="color: #6c757d; font-style: italic;">No specific warm-up for this session</p>';
+                return;
+            }
+
+            // Always show expand/collapse controls for warm-up section
+            const warmupTitle = document.querySelector('.warmup-title');
+            warmupTitle.innerHTML = `
+                <span>Warm-up</span>
+                <div class="section-controls">
+                    <button class="expand-all-btn" onclick="toggleAllWarmupCards(true)">Expand All</button>
+                    <button class="expand-all-btn" onclick="toggleAllWarmupCards(false)">Collapse All</button>
+                </div>
+            `;
+            
+            warmupContent.innerHTML = warmupExercises.map((exercise, index) => `
+                <div class="exercise-item cardio-exercise collapsed" id="warmup-card-${index}">
+                    <div class="exercise-header" onclick="toggleCard('warmup-card-${index}')">
+                        <div>
+                            <div class="exercise-name">${exercise.name}</div>
+                            ${exercise.duration ? `<div class="duration-info">${exercise.duration}</div>` : ''}
+                        </div>
+                        <button class="collapse-btn" type="button">▼</button>
+                    </div>
+                    <div class="exercise-content collapsed" id="warmup-content-${index}">
+                        ${exercise.sets ? renderSets(exercise.sets, `warmup-${index}`) : renderWarmupNotes(`warmup-${index}`)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderExercises(exercises) {
+            const exerciseContent = document.getElementById('exerciseContent');
+            
+            // Update exercise title with expand/collapse all button if multiple exercises
+            const exerciseTitle = document.querySelector('.exercise-title');
+            if (exercises.length > 1) {
+                exerciseTitle.innerHTML = `
+                    <span>Training Exercises</span>
+                    <div class="section-controls">
+                        <button class="expand-all-btn" onclick="toggleAllExerciseCards(true)">Expand All</button>
+                        <button class="expand-all-btn" onclick="toggleAllExerciseCards(false)">Collapse All</button>
+                    </div>
+                `;
+            } else {
+                exerciseTitle.innerHTML = 'Training Exercises';
+            }
+            
+            exerciseContent.innerHTML = exercises.map((exercise, index) => {
+                const isCardio = exercise.duration || exercise.name.toLowerCase().includes('treadmill') || 
+                                exercise.name.toLowerCase().includes('stair') || exercise.name.toLowerCase().includes('bike') ||
+                                exercise.name.toLowerCase().includes('hike');
+                const hasMultipleCards = exercises.length > 1;
+                
+                return `
+                    <div class="exercise-item ${isCardio ? 'cardio-exercise' : 'strength-exercise'} ${hasMultipleCards ? 'collapsed' : ''}" id="exercise-card-${index}">
+                        ${hasMultipleCards ? `
+                            <div class="exercise-header" onclick="toggleCard('exercise-card-${index}')">
+                                <div>
+                                    <div class="exercise-name">${exercise.name}</div>
+                                    ${exercise.duration ? `<div class="duration-info">${exercise.duration}</div>` : ''}
+                                </div>
+                                <button class="collapse-btn" type="button">▼</button>
+                            </div>
+                        ` : `
+                            <div class="exercise-name">${exercise.name}</div>
+                            ${exercise.duration ? `<div class="duration-info">${exercise.duration}</div>` : ''}
+                        `}
+                        <div class="exercise-content ${hasMultipleCards ? 'collapsed' : 'expanded'}" id="exercise-content-${index}">
+                            ${renderSets(exercise.sets, `exercise-${index}`)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSets(sets, exercisePrefix) {
+            if (!sets || sets.length === 0) return '';
+            
+            return `
+                <div class="sets-container">
+                    ${sets.map((set, setIndex) => `
+                        <div class="set-row">
+                            <div class="set-label">Set ${setIndex + 1}</div>
+                            <div class="input-group">
+                                <label class="input-label">Reps</label>
+                                <input 
+                                    type="text" 
+                                    class="form-input required" 
+                                    placeholder="${set.reps || 'Enter reps'}"
+                                    data-exercise="${exercisePrefix}" 
+                                    data-set="${setIndex}" 
+                                    data-field="reps"
+                                    ${set.reps ? `value="${set.reps}"` : ''}
+                                >
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Weight (lbs)</label>
+                                <input 
+                                    type="number" 
+                                    class="form-input required" 
+                                    placeholder="0"
+                                    min="0"
+                                    step="0.5"
+                                    data-exercise="${exercisePrefix}" 
+                                    data-set="${setIndex}" 
+                                    data-field="weight"
+                                >
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Notes (Optional)</label>
+                                <textarea 
+                                    class="form-input notes-input" 
+                                    placeholder="Any notes for this set..."
+                                    data-exercise="${exercisePrefix}" 
+                                    data-set="${setIndex}" 
+                                    data-field="notes"
+                                ></textarea>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderWarmupNotes(exercisePrefix) {
+            return `
+                <div class="sets-container">
+                    <div class="set-row">
+                        <div class="set-label">Notes</div>
+                        <div class="input-group" style="grid-column: span 3;">
+                            <label class="input-label">Warm-up Notes (Optional)</label>
+                            <textarea 
+                                class="form-input notes-input" 
+                                placeholder="Any notes about this warm-up exercise..."
+                                data-exercise="${exercisePrefix}" 
+                                data-set="0" 
+                                data-field="notes"
+                                style="min-height: 80px;"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupFormValidation() {
+            const submitButton = document.getElementById('submitButton');
+            
+            // Handle form submission
+            submitButton.addEventListener('click', function() {
+                if (validateForm()) {
+                    submitSession();
+                }
+            });
+        }
+
+        function validateForm() {
+            // Only validate required inputs for main exercises (not warm-up exercises)
+            const requiredInputs = document.querySelectorAll('[data-exercise^="exercise-"].form-input.required');
+            let isValid = true;
+            
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.style.borderColor = '#dc3545';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#28a745';
+                }
+            });
+            
+            if (!isValid) {
+                showError('Please fill in all required fields (reps and weight for main exercises).');
+            }
+            
+            return isValid;
+        }
+
+        function submitSession() {
+            const sessionData = collectSessionData();
+            
+            if (!sessionData) {
+                showError('Unable to collect session data. Please try again.');
+                return;
+            }
+            
+            showLoading(true);
+            
+            google.script.run
+                .withSuccessHandler(onSubmitSuccess)
+                .withFailureHandler(onSubmitError)
+                .saveWorkoutData(sessionData);
+        }
+
+        function collectSessionData() {
+            try {
+                const exercises = [];
+                const warmupExercises = [];
+                
+                // Collect warm-up exercise data
+                if (currentSessionData.warmup && currentSessionData.warmup.length > 0) {
+                    currentSessionData.warmup.forEach((warmupExercise, warmupIndex) => {
+                        const sets = [];
+                        
+                        if (warmupExercise.sets) {
+                            // Warm-up exercise with sets (like bodyweight exercises)
+                            warmupExercise.sets.forEach((set, setIndex) => {
+                                const repsInput = document.querySelector(`[data-exercise="warmup-${warmupIndex}"][data-set="${setIndex}"][data-field="reps"]`);
+                                const weightInput = document.querySelector(`[data-exercise="warmup-${warmupIndex}"][data-set="${setIndex}"][data-field="weight"]`);
+                                const notesInput = document.querySelector(`[data-exercise="warmup-${warmupIndex}"][data-set="${setIndex}"][data-field="notes"]`);
+                                
+                                sets.push({
+                                    reps: repsInput ? repsInput.value : set.reps || '',
+                                    weight: weightInput ? weightInput.value : '0',
+                                    notes: notesInput ? notesInput.value : ''
+                                });
+                            });
+                        } else {
+                            // Warm-up exercise without sets (like cardio/duration exercises)
+                            const notesInput = document.querySelector(`[data-exercise="warmup-${warmupIndex}"][data-set="0"][data-field="notes"]`);
+                            
+                            sets.push({
+                                reps: warmupExercise.duration || 'As specified',
+                                weight: '0',
+                                notes: notesInput ? notesInput.value : ''
+                            });
+                        }
+                        
+                        warmupExercises.push({
+                            name: warmupExercise.name,
+                            sets: sets
+                        });
+                    });
+                }
+                
+                // Collect main exercise data
+                currentSessionData.exercises.forEach((exercise, exerciseIndex) => {
+                    const sets = [];
+                    
+                    exercise.sets.forEach((set, setIndex) => {
+                        const repsInput = document.querySelector(`[data-exercise="exercise-${exerciseIndex}"][data-set="${setIndex}"][data-field="reps"]`);
+                        const weightInput = document.querySelector(`[data-exercise="exercise-${exerciseIndex}"][data-set="${setIndex}"][data-field="weight"]`);
+                        const notesInput = document.querySelector(`[data-exercise="exercise-${exerciseIndex}"][data-set="${setIndex}"][data-field="notes"]`);
+                        
+                        sets.push({
+                            reps: repsInput ? repsInput.value : '',
+                            weight: weightInput ? weightInput.value : '',
+                            notes: notesInput ? notesInput.value : ''
+                        });
+                    });
+                    
+                    exercises.push({
+                        name: exercise.name,
+                        sets: sets
+                    });
+                });
+                
+                return {
+                    sessionNumber: currentSessionData.sessionNumber,
+                    warmupExercises: warmupExercises,
+                    exercises: exercises,
+                    sessionNotes: document.getElementById('sessionNotes').value
+                };
+            } catch (error) {
+                console.error('Error collecting session data:', error);
+                return null;
+            }
+        }
+
+        function onSubmitSuccess(result) {
+            showLoading(false);
+            
+            if (result.success) {
+                showSuccess(result.message);
+                
+                // Move to next session after 2 seconds
+                setTimeout(() => {
+                    if (currentSessionNumber < 60) {
+                        currentSessionNumber++;
+                        onCurrentSessionLoaded(currentSessionNumber);
+                    } else {
+                        showSuccess('🎉 Congratulations! You have completed the entire 60-session mountaineering training program!');
+                    }
+                }, 2000);
+            } else {
+                showError(result.message);
+            }
+        }
+
+        function onSubmitError(error) {
+            showLoading(false);
+            showError('Error submitting session: ' + error.toString());
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSection').style.display = show ? 'block' : 'none';
+            document.getElementById('appContent').style.display = show ? 'none' : 'block';
+        }
+
+        function showError(message) {
+            showMessage(message, 'error');
+        }
+
+        function showSuccess(message) {
+            showMessage(message, 'success');
+        }
+
+        function showMessage(message, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerHTML = `<div class="${type}">${message}</div>`;
+            
+            // Auto-hide after 5 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageArea.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        function onError(error) {
+            showLoading(false);
+            showError('Application error: ' + error.toString());
+        }
+
+        // Collapsible card functionality
+        function toggleCard(cardId) {
+            const card = document.getElementById(cardId);
+            const content = document.getElementById(cardId.replace('card', 'content'));
+            const button = card.querySelector('.collapse-btn');
+            
+            if (!card || !content || !button) return;
+            
+            const isCollapsed = content.classList.contains('collapsed');
+            
+            if (isCollapsed) {
+                // Expand
+                content.classList.remove('collapsed');
+                content.classList.add('expanded');
+                card.classList.remove('collapsed');
+                button.textContent = '▲';
+            } else {
+                // Collapse
+                content.classList.remove('expanded');
+                content.classList.add('collapsed');
+                card.classList.add('collapsed');
+                button.textContent = '▼';
+            }
+        }
+
+        function toggleAllWarmupCards(expand) {
+            const warmupCards = document.querySelectorAll('[id^="warmup-card-"]');
+            
+            warmupCards.forEach(card => {
+                const cardId = card.id;
+                const content = document.getElementById(cardId.replace('card', 'content'));
+                const button = card.querySelector('.collapse-btn');
+                
+                if (!content || !button) return;
+                
+                if (expand) {
+                    // Expand
+                    content.classList.remove('collapsed');
+                    content.classList.add('expanded');
+                    card.classList.remove('collapsed');
+                    button.textContent = '▲';
+                } else {
+                    // Collapse
+                    content.classList.remove('expanded');
+                    content.classList.add('collapsed');
+                    card.classList.add('collapsed');
+                    button.textContent = '▼';
+                }
+            });
+        }
+
+        function toggleAllExerciseCards(expand) {
+            const exerciseCards = document.querySelectorAll('[id^="exercise-card-"]');
+            
+            exerciseCards.forEach(card => {
+                const cardId = card.id;
+                const content = document.getElementById(cardId.replace('card', 'content'));
+                const button = card.querySelector('.collapse-btn');
+                
+                if (!content || !button) return;
+                
+                if (expand) {
+                    // Expand
+                    content.classList.remove('collapsed');
+                    content.classList.add('expanded');
+                    card.classList.remove('collapsed');
+                    button.textContent = '▲';
+                } else {
+                    // Collapse
+                    content.classList.remove('expanded');
+                    content.classList.add('collapsed');
+                    card.classList.add('collapsed');
+                    button.textContent = '▼';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

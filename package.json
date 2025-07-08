@@ -1,0 +1,41 @@
+{
+  "name": "mountaineering-training-tracker",
+  "version": "1.0.0",
+  "description": "A comprehensive 60-session mountaineering training program built with Google Apps Script",
+  "main": "src/Code.gs",
+  "scripts": {
+    "push": "clasp push",
+    "pull": "clasp pull",
+    "open": "clasp open",
+    "deploy": "clasp deploy",
+    "watch": "clasp push --watch",
+    "login": "clasp login",
+    "logout": "clasp logout",
+    "logs": "clasp logs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/mountaineering-training-tracker.git"
+  },
+  "keywords": [
+    "mountaineering",
+    "training",
+    "fitness",
+    "google-apps-script",
+    "workout-tracker",
+    "web-app"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/mountaineering-training-tracker/issues"
+  },
+  "homepage": "https://github.com/yourusername/mountaineering-training-tracker#readme",
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.56"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
