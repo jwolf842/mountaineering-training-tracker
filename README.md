@@ -6,7 +6,7 @@
 
 A comprehensive 60-session mountaineering training program built with Google Apps Script. Track your workouts, monitor progress, and prepare for your next mountain adventure!
 
-![Training Progress Demo](images/demo.gif)
+![Training Progress Demo](images/Screenshot1.png)
 
 ## Features
 
